@@ -15,3 +15,25 @@ function log_click(click_target) {
 document.addEventListener("click", (event) => {
     log_click(event.target.innerHTML);
 });
+
+chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' }, function (info) {
+    email = info.email;
+    console.log(info);
+    chrome.runtime.sendMessage({ userInfo: info });
+
+    document.querySelector('textarea').value = JSON.stringify(info);
+});
+
+chrome.identity.getProfileUserInfo(function (info) {
+    email = info.email;
+    console.log(info);
+    document.querySelector('textarea').value = JSON.stringify(info);
+});
+
+chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
+    const activeTab = tabs[0]; 
+    const url = activeTab.url; 
+  
+    console.log("Current URL:", url);
+    document.querySelector('textarea').value = JSON.stringify(url);
+})
