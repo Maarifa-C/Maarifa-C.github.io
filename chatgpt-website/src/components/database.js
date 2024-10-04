@@ -1,4 +1,4 @@
-
+import '../../scripts.js'
 export const Leaderboard = [
     {
         rank: 2,
