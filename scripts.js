@@ -1,6 +1,20 @@
 var startTime; 
 var stopwatchInterval;
 var elapsedPausedTime = 0;
+let question = 0;
+let email;
+
+chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' }, function (info) {
+  email = info.email; 
+  email = JSON.stringify(email);
+  document.querySelector('textarea').value = typeof(email)
+});
+
+// chrome.identity.getProfileUserInfo(function (info) {
+//     email = info.email;
+//     console.log(info);
+
+// });
 
 function startStopwatch() {
   if (!stopwatchInterval) {
@@ -41,7 +55,8 @@ function log_click(click_target) {
     if (dMatch) {
         const dValue  = dMatch[1];
         if(dValue === str){
-            console.log("Sent")
+            question+=1
+            console.log(email)
         }
     }
 
@@ -52,27 +67,38 @@ document.addEventListener("click", (event) => {
     log_click(event.target.innerHTML);
 });
 
-chrome.identity.getProfileUserInfo({ 'accountStatus': 'ANY' }, function (info) {
-    email = info.email;
-    console.log(info);
-    chrome.runtime.sendMessage({ userInfo: info });
 
-    //document.querySelector('textarea').value = JSON.stringify(info);
-});
-
-chrome.identity.getProfileUserInfo(function (info) {
-    email = info.email;
-    console.log(info);
-    //document.querySelector('textarea').value = JSON.stringify(info);
-});
 
 chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
     const activeTab = tabs[0]; 
     const url = activeTab.url; 
 
     if(url === 'https://chatgpt.com/'){
-      document.querySelector('textarea').value = JSON.stringify(url);
+      //document.querySelector('textarea').value = JSON.stringify(url);
     } else{
 
     }
 })
+
+const dataToSend = {
+  "rank": 1,
+  "name": "lll",
+  "questions": 7,
+  "active": false
+}
+
+// Sending POST request to Flask
+fetch('http://127.0.0.1:5000/post', {
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  method: 'POST', 
+  body: JSON.stringify(dataToSend)
+})
+.then(response => response.json())
+.then(data => {
+  console.log('Success:', data);
+})
+.catch((error) => {
+  console.error('Error:', error);
+});
