@@ -82,23 +82,18 @@ chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
 
 const dataToSend = {
   "rank": 1,
-  "name": "lll",
+  "name": "",
   "questions": 7,
   "active": false
 }
 
 // Sending POST request to Flask
-fetch('http://127.0.0.1:5000/post', {
+fetch('/post', {
+  method: 'POST', 
   headers: {
     'Content-Type': 'application/json',
-  },
-  method: 'POST', 
-  body: JSON.stringify(dataToSend)
+  },body: JSON.stringify(dataToSend)
 })
 .then(response => response.json())
-.then(data => {
-  console.log('Success:', data);
-})
-.catch((error) => {
-  console.error('Error:', error);
-});
+.then(data => console.log(data))
+.catch(error => console.error(error));

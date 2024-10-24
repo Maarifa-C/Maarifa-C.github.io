@@ -1,11 +1,14 @@
 import React, { useState } from 'react'
 import { Leaderboard } from './database';
 
+function Active(active) {
+    if (active) {
+      return <img src="https://cdn-icons-png.flaticon.com/512/100/100470.png" />
+    }
+    return <img src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/prod-pict-xmark_2.png" />
+  }
+
 export default function Board() {
-
-    const [period, setPeriod] = useState(0);
-
-
   return (
     <div className="board">
         <table>
@@ -13,6 +16,8 @@ export default function Board() {
                 <th>Rank</th>
                 <th>Name</th>
                 <th>Questions</th>
+                <th>Active</th>
+                <th>Duration</th>
             </tr>
             {Leaderboard.map((val, index) => {
                 return(
@@ -20,6 +25,8 @@ export default function Board() {
                         <td>{val.rank}</td>
                         <td>{val.name}</td>
                         <td>{val.score}</td>
+                        <td>{Active(val.active)}</td>
+                        <td>{val.duration}</td>
                     </tr>
                 )
             })}
