@@ -88,12 +88,20 @@ const dataToSend = {
 }
 
 // Sending POST request to Flask
-fetch('/post', {
-  method: 'POST', 
+
+const data = [1, 2, 3, 4, 5];
+
+fetch('/http://localhost:5000/post', {
+  method: 'POST',
   headers: {
-    'Content-Type': 'application/json',
-  },body: JSON.stringify(dataToSend)
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({data: data})
 })
-.then(response => response.json())
-.then(data => console.log(data))
-.catch(error => console.error(error));
+.then(response => response.text())
+.then(result => {
+  console.log(result);
+})
+.catch(error => {
+  console.error('Error:', error);
+});

@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 export const Leaderboard = [
     {
         rank: 2,
@@ -19,8 +21,3 @@ Leaderboard.sort(function(a, b) {
     return a.rank - b.rank;
 });
 
-
-fetch('https://api.example.com/data')
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch(error => console.error(error));
