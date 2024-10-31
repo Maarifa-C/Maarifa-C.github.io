@@ -1,6 +1,8 @@
 import json
-from flask import Flask, jsonify, request
+from flask import Flask,render_template, request, jsonify
 from flask_cors import CORS
+
+
 
 data = [{'rank': 1,'name': 'test1', 'questions': 0, 'active': False}]
 
@@ -16,9 +18,9 @@ def get_data():
     
 @app.route('/post', methods=['POST'])
 def add_data():
-  data = request.json['data']
-  result = sum(data)
-  return jsonify({'result': result})
+  user = request.json['data']
+  data.append(user)
+  return jsonify(user)
 
 
  
