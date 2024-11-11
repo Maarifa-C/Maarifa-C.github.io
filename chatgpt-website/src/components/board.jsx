@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Leaderboard } from './database';
+import { Leaderboard } from '../database';
 
 function Active(active) {
     if (active) {

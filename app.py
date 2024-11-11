@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 
 
-data = [{'rank': 1,'name': 'test1', 'questions': 0, 'active': False}]
+data = []
 
 # instance of flask application
 app = Flask(__name__)
