@@ -18,21 +18,26 @@ export default function Board() {
                 <th>Questions</th>
                 <th>Active</th>
                 <th>Duration</th>
+                <th>Messages</th>
             </tr>
             {Leaderboard.map((val, index) => {
                 return(
                     <tr key = {index}>
                         <td>{val.rank}</td>
-                        <td>{val.name}</td>
+                        <td><h1 onClick={() => alert('Inline click handler alert!')}>{val.name}</h1></td>
                         <td>{val.score}</td>
                         <td>{Active(val.active)}</td>
                         <td>{val.duration}</td>
+                        <td>{val.messages[val.messages.length-1] + ', ' + val.messages[val.messages.length-2]
+                          + ', ' + val.messages[val.messages.length-3]  + ', ' + val.messages[val.messages.length-4]
+                          + ', ' + val.messages[val.messages.length-5]}</td>
                     </tr>
                 )
             })}
         </table>
 
     </div>
+
   )
 }
 

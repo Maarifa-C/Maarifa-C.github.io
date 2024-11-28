@@ -8,12 +8,23 @@ function App() {
 
   
 const [data, setData] = useState([{}])
+const [message, setMessage] = useState([{}])
 useEffect(() => {
   fetch('http://localhost:5000/get').then(res => res.json()).then(data => {
     setData(data)
-    Leaderboard.push(...data)
+    setMessage(data.message)
     
-    console.log(data)
+      function pushData(val) {
+          Leaderboard.length = 0
+          Leaderboard.push(val)
+          console.log(val.message)
+        }
+
+        
+    data.map(pushData)
+
+
+
     });
 }, []);
 
