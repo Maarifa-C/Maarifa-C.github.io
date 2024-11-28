@@ -12,15 +12,13 @@ const [message, setMessage] = useState([{}])
 useEffect(() => {
   fetch('http://localhost:5000/get').then(res => res.json()).then(data => {
     setData(data)
-    setMessage(data.message)
     
       function pushData(val) {
           Leaderboard.length = 0
-          Leaderboard.push(val)
-          console.log(val.message)
+          console.log(val.messages)
+         Leaderboard.push(val)
         }
 
-        
     data.map(pushData)
 
 

@@ -1,38 +1,14 @@
 let question = 0;
-let active = false;
 let url = window.location.href
 let nameUser;
-let duration = 0;
 let nameAndEmail;
+let messageAll = []
 let message = []
 
 
-
 if(url == 'https://chatgpt.com/'){
-    active = true;
     nameAndEmail = document.body.innerHTML.match(`window\.__remixContext.*?"name":"([^\"]+)","email":"([^\"]+)"`).slice(1)
-    setInterval(() => {
-        duration += 1
-        fetch('http://127.0.0.1:5000/post', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({data: {  rank: 1,
-            name: nameAndEmail[0],
-            score : question,
-            active: active,
-            duration: duration,}})
-        })
-        .then(response => response.text())
-        .then(result => {
-          console.log(result);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    }, 60000)  
-    
+
     fetch('http://127.0.0.1:5000/post', {
       method: 'POST',
       headers: {
@@ -41,8 +17,7 @@ if(url == 'https://chatgpt.com/'){
       body: JSON.stringify({data: {  rank: 1,
         name: nameAndEmail[0],
         score : question,
-        active: active,
-        duration: duration,}})
+        messages: message}})
     })
     .then(response => response.text())
     .then(result => {
@@ -52,27 +27,6 @@ if(url == 'https://chatgpt.com/'){
       console.error('Error:', error);
     });
 
-} else{
-    active = false;
-    duration = 0
-    fetch('http://127.0.0.1:5000/post', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({data: {  rank: 1,
-        name: nameAndEmail[0],
-        score : question,
-        active: active,
-        duration: duration,}})
-    })
-    .then(response => response.text())
-    .then(result => {
-      console.log(result);
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
 }
   
 
@@ -90,8 +44,11 @@ function log_click(click_target) {
         
         function getMessage() {
              //gets all the messages
-             message = Array.from(document.body.innerHTML.matchAll(/whitespace-pre-wrap">([^<]+)<\/div><div/g)).map(match => match[1]);
-//             console.log(message[message.length-1])
+             let lastMatch;
+             messageAll = Array.from(document.body.innerHTML.matchAll(/whitespace-pre-wrap">([^<]+)<\/div><div/g)).map(match => match[1]);
+             message.push(messageAll[messageAll.length-1])
+            console.log(message)
+
 fetch('http://127.0.0.1:5000/post', {
   method: 'POST',
   headers: {
@@ -100,8 +57,6 @@ fetch('http://127.0.0.1:5000/post', {
   body: JSON.stringify({data: {  rank: 1,
     name: nameAndEmail[0],
     score : question,
-    active: active,
-    duration: duration,
     messages: message}})
   })
   .then(response => response.text())
@@ -122,8 +77,7 @@ headers: {
 body: JSON.stringify({data: {  rank: 1,
   name: nameAndEmail[0],
   score : question,
-  active: active,
-  duration: duration,}})
+  messages: message}})
 })
 .then(response => response.text())
 .then(result => {
