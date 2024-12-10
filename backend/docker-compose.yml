@@ -1,6 +1,6 @@
 services:
     backend:
-        image: ghcr.io/Maarifa-C/Maarifa-C.github.io:latest
+        image: ghcr.io/maarifa-c/backen_image.github.io:latest
         ports:
             - 3000:3000
         environment:
