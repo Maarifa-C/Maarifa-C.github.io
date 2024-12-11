@@ -1,0 +1,55 @@
+services:
+  traefik:
+    image: traefik:v2.4
+    restart: unless-stopped
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./certs:/letsencrypt"
+    command:
+      - "--providers.docker"
+      - "--log.filePath=/logs/traefik.log"
+      - "--log.level=DEBUG"
+      - "--log.format=json"
+      - "--accesslog=true"
+
+      - "--entryPoints.web.address=:80"
+      - "--entryPoints.websecure.address=:443"
+      - "--providers.docker.exposedbydefault=false"
+
+      - "--certificatesresolvers.le.acme.email=somemail@gmail.com"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+      - "--certificatesresolvers.le.acme.tlschallenge=true"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - "t_proxy"
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
+      - "traefik.http.middlewares.portainer-stripprefix.stripprefix.prefixes=/portainer"
+      - "traefik.http.routers.portainer.middlewares=portainer-stripprefix@docker"
+
+      - "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.rule=(Host(`rhetfig-staging.uwaterloo.ca/maarifa_stack1`) && PathPrefix(`/portainer`))"
+
+      - "traefik.http.routers.portainer-http.middlewares=portainer-https"
+      - "traefik.http.middlewares.portainer-https.redirectscheme.scheme=https"
+
+      - "traefik.http.routers.portainer.tls.certresolver=le"
+    networks:
+      - "t_proxy"
+volumes:
+  portainer_data:
+
+networks:
+  t_proxy:
+    name: "t_proxy"
