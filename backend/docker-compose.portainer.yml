@@ -38,8 +38,12 @@ services:
       - "traefik.http.middlewares.portainer-stripprefix.stripprefix.prefixes=/portainer"
       - "traefik.http.routers.portainer.middlewares=portainer-stripprefix@docker"
 
-      - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.rule=(Host(`rhetfig-staging.uwaterloo.ca/maarifa_stack1`) && PathPrefix(`/portainer`))"
+      -  "traefik.http.routers.portainer.entrypoints=websecure"
+      - "traefik.http.routers.portainer.rule=(Host(`rhetoricon.uwaterloo.ca/maarifa`) && PathPrefix(`/portainer`))"
+
+      - "traefik.http.routers.portainer-http.entrypoints=web"
+      - "traefik.http.routers.portainer-http.rule=(Host(`rhetoricon.uwaterloo.ca/maarifa`) && PathPrefix(`/portainer`))"
+
 
       - "traefik.http.routers.portainer-http.middlewares=portainer-https"
       - "traefik.http.middlewares.portainer-https.redirectscheme.scheme=https"
