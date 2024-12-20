@@ -1,4 +1,4 @@
-Description:
+Description
 
 A browser extension that keeps track of questions asked to ChatGPT and displays them on a leaderboard located on another website. It will collect question data, forward it to a backend for processing, and update the leaderboard in real time. It's mostly a productivity tracker; it provides insights about using ChatGPT.
 
