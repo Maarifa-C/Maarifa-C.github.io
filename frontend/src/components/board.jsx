@@ -1,15 +1,9 @@
 import React, { useState } from 'react'
 import { Leaderboard } from '../database';
 
-function Active(active) {
-    if (active) {
-      return <img src="https://cdn-icons-png.flaticon.com/512/100/100470.png" />
-    }
-    return <img src="https://www.rawshorts.com/freeicons/wp-content/uploads/2017/01/prod-pict-xmark_2.png" />
-  }
-
 export default function Board() {
   return (
+    //makes the leaderboard
     <div className="board">
         <table>
             <tr>
@@ -20,9 +14,10 @@ export default function Board() {
             </tr>
             {Leaderboard.map((val, index) => {
                 return(
+                    //shows the values of rank, name, score and gets the last 5 messages 
                     <tr key = {index}>
                         <td>{val.rank}</td>
-                        <td><h1 onClick={() => alert('Inline click handler alert!')}>{val.name}</h1></td>
+                        <td>{val.name}</td>
                         <td>{val.score}</td>
                         <td>{val.messages.slice(-5).reverse() + ''}</td>
                     </tr>

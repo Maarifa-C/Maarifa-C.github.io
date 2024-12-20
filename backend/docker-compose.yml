@@ -33,26 +33,49 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+
       - "traefik.http.middlewares.portainer-stripprefix.stripprefix.prefixes=/portainer"
       - "traefik.http.routers.portainer.middlewares=portainer-stripprefix@docker"
+
       - "traefik.http.routers.portainer.entrypoints=websecure"
-      - "traefik.http.routers.portainer.rule=(Host(`rhetoricon.uwaterloo.ca/maarifa`) && PathPrefix(`/maarifa`))"
+      - "traefik.http.routers.portainer.rule=(Host(`http://rhetfig-staging.uwaterloo.ca/`) && PathPrefix(`/portainer`))"
 
       - "traefik.http.routers.portainer-http.entrypoints=web"
-      - "traefik.http.routers.portainer-http.rule=(Host(`rhetoricon.uwaterloo.ca/maarifa`) && PathPrefix(`/maarifa`))"
+      - "traefik.http.routers.portainer-http.rule=(Host(`http://rhetfig-staging.uwaterloo.ca/`) && PathPrefix(`/portainer`))"
+
       - "traefik.http.routers.portainer-http.middlewares=portainer-https"
       - "traefik.http.middlewares.portainer-https.redirectscheme.scheme=https"
+
       - "traefik.http.routers.portainer.tls.certresolver=le"
     networks:
       - "t_proxy"
 
   backend:
-    image: ghcr.io/maarifa-c/backen_image.github.io:latest
+    container_name: backend_container
+    image: ghcr.io/maarifa-c/backend_image:latest
     ports:
       - "3000:3000"
     environment:
       NODE_ENV: production
     restart: always
+    labels:
+      - "traefik.enable=true"
+      - "com.centurylinklabs.watchtower.enable=true"
+      - "traefik.http.services.backend.loadbalancer.server.port=3000"
+
+      - "traefik.http.routers.backend-http.entrypoints=web"
+      - "traefik.http.routers.backend.entrypoints=websecure"
+
+      - "traefik.http.routers.rhetoricon.entrypoints=websecure"
+      - "traefik.http.routers.rhetoricon.rule=(Host(`rhetfig-staging.uwaterloo.ca`) && PathPrefix(`/maarifa`))"
+
+      - "traefik.http.routers.rhetoricon-http.entrypoints=web"
+      - "traefik.http.routers.rhetoricon-http.rule=(Host(`rhetfig-staging.uwaterloo.ca`) && PathPrefix(`/maarifa`))"
+
+      - "traefik.http.routers.backend-http.middlewares=backend-https"
+      - "traefik.http.middlewares.backend-https.redirectscheme.scheme=https"
+
+      - "traefik.http.routers.backend.tls.certresolver=le"
 
 volumes:
   portainer_data:
@@ -60,4 +83,5 @@ volumes:
 networks:
   t_proxy:
     name: "t_proxy"
+
 
